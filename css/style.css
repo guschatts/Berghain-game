@@ -1,0 +1,41 @@
+body {
+    padding: 0;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    color: #fff;
+    background-color: black
+  }
+.Berghain-game {
+    text-transform: uppercase;
+    font-size: 2.8em;
+}
+h2 {
+    font-size: 2.5em;
+    margin-bottom: 5px;
+}
+p {
+
+}
+.logo-berghain {
+    width: 20vh;
+    
+}
+  .start-button {
+    font-size: 2em;
+    background-image: none;
+    color: rgb(178, 177, 177);
+    padding: 20px 20px;
+    border: 0;
+    box-shadow: 0;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+  .start-button:hover {
+    cursor: pointer;
+  }
+
+  
+canvas {
+    
+}
