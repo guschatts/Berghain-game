@@ -16,8 +16,6 @@ function generateRandomColor() {
 setInterval(changeColor, 300)
 
 
-
-
 const gameScreen = new Image();
 gameScreen.src = "/images/dirt-background.jpeg"
 
@@ -27,14 +25,14 @@ const myObstacles = [];
 let intervalId;
 
 // CLASS
-class obstacles {
+class Obstacles {
   constructor(width, height, color, x, y) {
     this.width = width;
     this.height = height;
     this.color = color;
-    this.x = x;
+    this.x = canvas.width - 200;
     this.y = y;
-    // new speed properties
+    
     this.speedX = 0;
     this.speedY = 0;
 
@@ -46,7 +44,7 @@ class obstacles {
     fences.src = "/images/fences.png";
   }
   draw() {
-    ctx.drawImage(this.fences, this.x, this.y, 100, 200);
+    ctx.drawImage(this.fences, this.x, this.y, 60, this.height);
   }
   update() {
     ctx.fillStyle = this.color
@@ -68,11 +66,21 @@ class obstacles {
   bottom() {
     return this.y + this.height;
   }
+
+  crashWith(obstacle) {
+
+    return !(
+    this.bottom() < obstacle.top() ||
+    this.top() > obstacle.bottom() ||
+    this.right() < obstacle.left() +5 ||
+    this.left() > obstacle.right() -5
+  );
+}
 }
 
-class building {
+class Building {
   constructor() {
-    this.x = 1355;
+    this.x = canvas.width - 145;
     this.y = -50;
  
     const theBuilding = new Image();
@@ -88,9 +96,9 @@ class building {
 }
 
 
-class player {
+class Player {
   constructor() {
-    this.x = 5;
+    this.x = canvas.width - 500//(canvas.width - 5);
     this.y = 250;
     this.speedX = 0;
     this.speedY = 0;
@@ -130,24 +138,29 @@ class player {
     return this.x
   }  
 
-  crashWith(obstacle) {
-    console.log("condition 1", !this.bottom() < obstacle.top())
-    console.log("condition 2", !this.top() > obstacle.bottom())
-    console.log("condition 3", !this.right() < obstacle.left())
-    console.log("condition 4", !this.left() > obstacle.right())
-    return !(
-      this.bottom() < obstacle.top() || 
-      this.top() > obstacle.bottom() || 
-      this.right() < obstacle.left() +500 || 
-      this.left() > obstacle.right());
-}
+//   crashWith(obstacle) {
+//     console.log("condition 1", !this.bottom() < obstacle.top())
+//     console.log("condition 2", !this.top() > obstacle.bottom())
+//     console.log("condition 3", !this.right() < obstacle.left())
+//     console.log("condition 4", !this.left() > obstacle.right())
+//     return !(
+//       this.bottom() < obstacle.top() || 
+//       this.top() > obstacle.bottom() || 
+//       this.right() < obstacle.left() +5 || 
+//       this.left() > obstacle.right());
+// }
 }
 
 // FUNCTIONS
+
 function startGame() {
   drawBackground();
   playerAvatar.draw();
   theBuilding.draw()
+}
+
+function stop() {
+  clearInterval(intervalId);
 }
 
 function drawBackground () {
@@ -157,13 +170,22 @@ function drawBackground () {
   document.querySelector('#game-screen').style = 'display: flex; justify-content: center;';
 }
 
+function updateTimer() {
+  time = Math.floor(frames/10); // 1 sec -->12
+  ctx.font = '18px arial';
+  ctx.fillStyle = 'black';
+  ctx.fillText(`Time: ${time}min`, canvas.width -150, 35);
+}
+
 function updateGame() {
   ctx.clearRect(0, 0, canvas.Width, canvas.height);
   drawBackground();
   theBuilding.draw();
   playerAvatar.draw();
   updateObstacles();
+  updateTimer();
   checkGameOver();
+  
   
 
 }
@@ -177,6 +199,7 @@ function updateObstacles() {
   frames += 1;
   if (frames % 180 === 0) {
     let x = canvas.width;
+    let y = canvas.height; // added
     let minHeight = 80;
     let maxHeight = 400;
     let height = Math.floor(
@@ -185,10 +208,24 @@ function updateObstacles() {
     let minGap = 130;
     let maxGap = 200;
     let gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
-    myObstacles.push(new obstacles(10, height, "grey", x, 0));
-    myObstacles.push(
-      new obstacles(10, x - height - gap, "grey", x, height + gap)
+    myObstacles.push(new Obstacles(5, height, "gray", x, 0));
+    myObstacles.push(new Obstacles(5, y - height - gap, "gray", x, height + gap)
+      // new Obstacles(10, x - height - gap, "blue", x, height + gap)
+      
     );
+  }
+}
+
+function checkGameOver() {
+  const crashed = myObstacles.some(function (obstacle) {// check if one of the obstacles has crashed with the player
+    return playerAvatar.crashWith(obstacle);
+  });
+
+  if(crashed) {
+    stop();
+    //console.log(myObstacles[0], myObstacles[1]);
+    //alert("game over")
+    console.log("game over");
   }
 }
 
@@ -202,28 +239,13 @@ function updateObstacles() {
 //   );
 // }
 
-function checkGameOver() {
-  // const crashed = myObstacles.some(function(obstacle) {
-  //   return crashWith(obstacle);
-  // });
-  const crashed = myObstacles.some(function (obstacle) {// check if one of the obstacles has crashed with the player
-    return playerAvatar.crashWith(obstacle);
-  });
 
-  if(crashed) {
-    //stop();
-    console.log(myObstacles[0], myObstacles[1]);
-    alert("game over")
-    console.log("game over");
-  }
-}
 
-function stop() {
-  clearInterval(intervalId);
-}
 
-const playerAvatar = new player();
-const theBuilding = new building();
+const playerAvatar = new Player();
+const theBuilding = new Building();
+
+
 // WINDOWS
 
 window.onload = () => {
