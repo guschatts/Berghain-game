@@ -19,10 +19,10 @@ setInterval(changeColor, 300)
 //------------------------
 
 const gameScreen = new Image();
-gameScreen.src = "/images/dirt-background.jpeg"
+gameScreen.src = "../images/dirt-background.jpeg"
 
 const partyScreen = new Image();
-partyScreen.src = "/images/party-background.jpg"
+partyScreen.src = "Berghain-game/images/party-background.jpg"
 
 
 
@@ -48,7 +48,7 @@ class Obstacles {
 
     this.fences = fences;   
     });
-    fences.src = "/images/fences.png";
+    fences.src = "images/fences.png";
   }
   draw() {
     ctx.drawImage(this.fences, this.x, this.y, this.width, this.height);
@@ -95,7 +95,7 @@ class Building {
 
     this.theBuilding = theBuilding;   
     });
-    theBuilding.src = "/images/Berghain-gameScreen.png";
+    theBuilding.src = "images/Berghain-gameScreen.png";
   }
   draw() {
     ctx.drawImage(this.theBuilding, this.x, this.y, 200, 600);
@@ -117,7 +117,7 @@ class Player {
 
     this.avatar = avatar;   
     });
-    avatar.src = "/images/avatar1.png";
+    avatar.src = "images/avatar1.png";
   }
   draw() {
     ctx.drawImage(this.avatar, this.x, this.y, this.width, this.height);
