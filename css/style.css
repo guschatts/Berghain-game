@@ -11,6 +11,10 @@ body {
     font-size: 2.8em;
 }
 h2 {
+  text-transform: uppercase;
+  font-size: 2em;
+}
+h3 {
     font-size: 2.5em;
     margin-bottom: 5px;
 }
@@ -35,7 +39,18 @@ p {
     cursor: pointer;
   }
 
+  .berghain-not {
+    width: 30vw;
+  }
   
 canvas {
     
+}
+.color-overlay {
+  background-image: none;
+  width: 
+  height: 100vh;
+  opacity: 0.5;
+  text-align: center;
+  color: #fff;
 }

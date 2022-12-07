@@ -1,33 +1,40 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
+document.querySelector('#gameover-screen').style.display = 'none';
+
 // start buttom color
 function generateRandomColor() {
-    return '#'+Math.floor(Math.random()*16777215).toString(16);
-  }
-  
-  function changeColor() {
-    let startButton = document.getElementsByClassName("start-button");
-    for (i=0; i<startButton.length; i++) {
-        startButton[i].style.backgroundColor = generateRandomColor();
-    }
+  return '#'+Math.floor(Math.random()*16777215).toString(16);
 }
-  
-setInterval(changeColor, 300)
 
+function changeColor() {
+  let startButton = document.getElementsByClassName("start-button");
+  for (i=0; i<startButton.length; i++) {
+      startButton[i].style.backgroundColor = generateRandomColor();
+  }
+}
+
+setInterval(changeColor, 300)
+//------------------------
 
 const gameScreen = new Image();
 gameScreen.src = "/images/dirt-background.jpeg"
 
+const partyScreen = new Image();
+partyScreen.src = "/images/party-background.jpg"
+
+
+
 let counter = 0;
 let frames = 0;
-const myObstacles = [];
+let myObstacles = [];
 let intervalId;
 
 // CLASS
 class Obstacles {
   constructor(width, height, color, x, y) {
-    this.width = width;
+    this.width = 60;
     this.height = height;
     this.color = color;
     this.x = canvas.width - 200;
@@ -44,7 +51,7 @@ class Obstacles {
     fences.src = "/images/fences.png";
   }
   draw() {
-    ctx.drawImage(this.fences, this.x, this.y, 60, this.height);
+    ctx.drawImage(this.fences, this.x, this.y, this.width, this.height);
   }
   update() {
     ctx.fillStyle = this.color
@@ -102,7 +109,8 @@ class Player {
     this.y = 250;
     this.speedX = 0;
     this.speedY = 0;
- 
+    this.width = 70;
+    this.height = 120;
   
     const avatar = new Image();
     avatar.addEventListener('load', () => {
@@ -112,7 +120,7 @@ class Player {
     avatar.src = "/images/avatar1.png";
   }
   draw() {
-    ctx.drawImage(this.avatar, this.x, this.y, 70, 120);
+    ctx.drawImage(this.avatar, this.x, this.y, this.width, this.height);
   }
   
   
@@ -154,7 +162,7 @@ class Player {
 // FUNCTIONS
 
 function startGame() {
-  drawBackground();
+  drawGameScreen();
   playerAvatar.draw();
   theBuilding.draw()
 }
@@ -163,11 +171,36 @@ function stop() {
   clearInterval(intervalId);
 }
 
-function drawBackground () {
+function drawGameScreen () {
   
   ctx.drawImage(gameScreen, 0, 0, canvas.width, canvas.height);
-  document.querySelector('.game-intro').style.display = 'none'; // document.querySelector(".game-intro").remove();
+  document.querySelector('.game-intro').style.display = 'none';
+  document.querySelector('#gameover-screen').style.display = 'none'; // document.querySelector(".game-intro").remove();
   document.querySelector('#game-screen').style = 'display: flex; justify-content: center;';
+  
+}
+
+function drawPartyScreen() {
+  ctx.drawImage(partyScreen, 0, 0, canvas.width, canvas.height);
+  //canvas.style = 'opacity: 0.3;';
+  function partyBackground() {
+    let colorCh = document.getElementById("color-overlay")
+    colorCh.style.backgroundColor = generateRandomColor();
+    
+  }
+  partyBackground();
+  setInterval(partyBackground, 500);
+  //document.querySelector('#game-screen').style.display = 'none';
+  //theBuilding.remove;
+  
+  
+
+}
+
+function gameOver() {
+  document.querySelector('#game-screen').style.display = 'none';
+  document.querySelector('#gameover-screen').style = 'justify-content: center;';
+
 }
 
 function updateTimer() {
@@ -179,7 +212,7 @@ function updateTimer() {
 
 function updateGame() {
   ctx.clearRect(0, 0, canvas.Width, canvas.height);
-  drawBackground();
+  drawGameScreen();
   theBuilding.draw();
   playerAvatar.draw();
   updateObstacles();
@@ -218,26 +251,29 @@ function updateObstacles() {
 
 function checkGameOver() {
   const crashed = myObstacles.some(function (obstacle) {// check if one of the obstacles has crashed with the player
-    return playerAvatar.crashWith(obstacle);
+    return crashWith(obstacle);
   });
 
   if(crashed) {
     stop();
+    gameOver();
+    //drawPartyScreen();
     //console.log(myObstacles[0], myObstacles[1]);
     //alert("game over")
+    //alert("collision detected")
     console.log("game over");
   }
 }
 
-// function crashWith(obstacle) {
+function crashWith(obstacle) {
 
-//     return !(
-//     playerAvatar.bottom() < obstacle.top() ||
-//     playerAvatar.top() > obstacle.bottom() ||
-//     playerAvatar.right() < obstacle.left() +5 ||
-//     playerAvatar.left() > obstacle.right() -5
-//   );
-// }
+    return !(
+    playerAvatar.bottom() < obstacle.top() ||
+    playerAvatar.top() > obstacle.bottom() ||
+    playerAvatar.right() < obstacle.left() +5 ||
+    playerAvatar.left() > obstacle.right() -5
+  );
+}
 
 
 
@@ -246,16 +282,25 @@ const playerAvatar = new Player();
 const theBuilding = new Building();
 
 
-// WINDOWS
+// WINDOW
 
 window.onload = () => {
-  document.getElementById('start-button').onclick = () => {
-    startGame();
-    intervalId = setInterval(updateGame, 20);
-    
-    
-  };
-};         
+  document.getElementById('start-button'). onclick = () => {
+    //console.log(button)
+   // button.addEventListener('click', () => {
+      startGame();
+      intervalId = setInterval(updateGame, 20);
+    };
+
+    document.getElementById('restart-button'). onclick = () => {
+      //console.log(button)
+     // button.addEventListener('click', () => {
+        clearInterval(intervalId);
+        myObstacles = [];
+        startGame();
+        setTimeout(() => intervalId = setInterval(updateGame, 20), 100);
+      };
+  }         
 
 //EVENT LISTENER
 document.addEventListener('keydown', event => {
@@ -275,3 +320,4 @@ document.addEventListener('keydown', event => {
   }
   
 });
+
