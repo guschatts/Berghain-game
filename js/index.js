@@ -23,11 +23,16 @@ setInterval(changeColor, 300)
 //------------------------
 
 const gameScreen = new Image();
-gameScreen.src = "images/dirt-background.jpeg"
+gameScreen.src = "./images/dirt-background.jpeg"
 
 const partyScreen = new Image();
-partyScreen.src = "images/party-background.jpg"
+partyScreen.src = "./images/party-background.jpg"
 
+const gameoverScreen = new Image();
+gameoverScreen.src = "./images/berghain-not.today.jpg"
+
+const soundGameOver = new Audio("./sounds/birthofahero.mp3");
+const soundParty = new Audio("./sounds/dance.mp3");
 
 
 let counter = 0;
@@ -197,28 +202,33 @@ function drawPartyScreen() {
   ctx.font = '18px arial';
   ctx.fillStyle = 'white';
   ctx.fillText(`Time: ${time}min`, canvas.width -150, 35);
+  soundParty.play();
+
+
   
-  //canvas.style = 'opacity: 0.3;';
-  // function partyBackground() {
-  //   let colorCh = document.getElementById("color-overlay")
-  //   colorCh.style.backgroundColor = generateRandomColor();
+  // canvas.style = 'opacity: 0.3;';
+  function partyBackground() {
+    let colorCh = document.getElementById("color-overlay")
+    colorCh.style.backgroundColor = generateRandomColor();
     
-  // }
-  // partyBackground();
-  // setInterval(partyBackground, 500);
+  }
+  partyBackground();
+  setInterval(partyBackground, 500);
   //document.querySelector('#game-screen').style.display = 'none';
   //theBuilding.remove;
-  
-  
-
 }
 
+
+
 function gameOver() {
-  document.querySelector('#game-screen').style.display = 'none';
+  //document.querySelector('#game-screen').style.display = 'none';
   document.querySelector('#gameover-screen').style = 'justify-content: center;';
+  ctx.drawImage(gameoverScreen, 0, 0, canvas.width, canvas.height);
   ctx.font = '18px arial';
   ctx.fillStyle = 'white';
-  ctx.fillText(`Time: ${time}min`);
+  ctx.fillText(`Time: ${time}min`, canvas.width -150, 35);
+  soundGameOver.volume = 0.2;
+  soundGameOver.play();
 
 }
 
@@ -271,7 +281,7 @@ function updateObstacles() {
 
 function checkPartyIn() {
   stop();
-  if (time % 5 == 0) {
+  if (time % 2 == 0) {
     gameOver()
   }
   else {
@@ -335,6 +345,7 @@ window.onload = () => {
       //console.log(button)
      // button.addEventListener('click', () => {
         clearInterval(intervalId);
+        soundGameOver.remove();
         startGame();
         setTimeout(() => intervalId = setInterval(updateGame, 20), 100);
       };

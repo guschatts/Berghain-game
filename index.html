@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="./css/style.css" />
     <title>Berghain-game</title>
   </head>
   <body>
@@ -12,11 +12,11 @@
     <!-- MAIN PAGE -->
     <div class="game-intro">
       
-      <img class="building-icon" src="images/berghain-icon.png" alt="berghain-icon"  />
+      <img class="building-icon" src="./images/berghain-icon.png" alt="berghain-icon"  />
       <br />
       <h3> Let's Party! </h3>
       <button id="start-button" class="start-button">
-        <img class="logo-berghain" src="images/berghain-logo.svg" alt="logo-berghain" /></button>
+        <img class="logo-berghain" src="./images/berghain-logo.png" alt="logo-berghain" /></button>
       <p>Use the UP and DOWN arrow to walk through the fences!</p> 
       <p> Use RIGHT arrow to move foward!</p>
       
@@ -29,18 +29,24 @@
     <!-- GAMEOVER PAGE -->
     <div id="gameover-screen">
       <div class="gameover-background" >
-        <img class="berghain-not" src="images/berghain-not.today.jpg" alt="berghain-not"  />
+        <!--<img class="berghain-not" src="images/berghain-not.today.jpg" alt="berghain-not"  /> -->
         <h2> nicht leiter heute! </h2>
       </div>
       <h3> Try Again!! </h3>
       <button id="restart-button" class="restart-button">
-        <img class="logo-berghain" src="images/berghain-logo.svg" alt="logo-berghain" /></button>
+        <img class="logo-berghain" src="./images/berghain-logo.png" alt="logo-berghain" /></button>
     </div>
 
     <!-- WINNER PAGE -->
+    <div id="party-screen" >
+      <footer class="footer" >
+      <p>Music: bensound.com</p>
+    </footer>
+
+    </div>
     
     
 
-    <script src="js/index.js"></script>
+    <script src="./js/index.js"></script>
   </body>
 </html>
