@@ -3,6 +3,7 @@ const ctx = canvas.getContext('2d');
 
 document.querySelector('#gameover-screen').style.display = 'none';
 
+
 // start buttom color
 function generateRandomColor() {
   return '#'+Math.floor(Math.random()*16777215).toString(16);
@@ -47,7 +48,7 @@ class Obstacles {
     this.width = width;
     this.height = height;
     this.color = color;
-    this.x = canvas.width - 200;
+    this.x = canvas.width - 300;
     this.y = y;
     
     this.speedX = 0;
@@ -195,6 +196,7 @@ function drawGameScreen () {
   document.querySelector('#gameover-screen').style.display = 'none'; // document.querySelector(".game-intro").remove();
   document.querySelector('#game-screen').style = 'display: flex; justify-content: center;';
   
+  
 }
 
 function drawPartyScreen() {
@@ -202,6 +204,7 @@ function drawPartyScreen() {
   ctx.font = '18px arial';
   ctx.fillStyle = 'white';
   ctx.fillText(`Time: ${time}min`, canvas.width -150, 35);
+  soundParty.currentTime = 0;
   soundParty.play();
 
 
@@ -215,7 +218,7 @@ function drawPartyScreen() {
   partyBackground();
   setInterval(partyBackground, 500);
   //document.querySelector('#game-screen').style.display = 'none';
-  //theBuilding.remove;
+  
 }
 
 
@@ -227,13 +230,16 @@ function gameOver() {
   ctx.font = '18px arial';
   ctx.fillStyle = 'white';
   ctx.fillText(`Time: ${time}min`, canvas.width -150, 35);
+  soundGameOver.currentTime = 0;
   soundGameOver.volume = 0.2;
   soundGameOver.play();
+ 
+  
 
 }
 
 function updateTimer() {
-  time = Math.floor(frames/40); // 1 sec -->12
+  time = Math.floor(frames/10); // 1 sec -->12
   ctx.font = '18px arial';
   ctx.fillStyle = 'black';
   ctx.fillText(`Time: ${time}min`, canvas.width -150, 35);
@@ -281,7 +287,7 @@ function updateObstacles() {
 
 function checkPartyIn() {
   stop();
-  if (time % 2 == 0) {
+  if (time % 5 == 0) {
     gameOver()
   }
   else {
@@ -345,7 +351,8 @@ window.onload = () => {
       //console.log(button)
      // button.addEventListener('click', () => {
         clearInterval(intervalId);
-        soundGameOver.remove();
+        soundGameOver.pause();
+        soundParty.pause();
         startGame();
         setTimeout(() => intervalId = setInterval(updateGame, 20), 100);
       };

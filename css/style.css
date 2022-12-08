@@ -71,7 +71,8 @@ canvas {
   text-align: center;
   color: #fff;
 }
-.footer {
+#footer {
   font-size: 12px;
+  /*margin-top: 180px; */
   
 }
