@@ -23,7 +23,7 @@ setInterval(changeColor, 300)
 //------------------------
 
 const gameScreen = new Image();
-gameScreen.src = "../images/dirt-background.jpeg"
+gameScreen.src = "images/dirt-background.jpeg"
 
 const partyScreen = new Image();
 partyScreen.src = "images/party-background.jpg"
