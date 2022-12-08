@@ -197,7 +197,7 @@ window.onload = () => {
 
     document.getElementById('restart-button').onclick = () => {
         clearInterval(intervalId);
-        playerAvatar.x = 750 //canvas.width - (canvas.width + 5);
+        playerAvatar.x = canvas.width - (canvas.width + 5);
         playerAvatar.y = 250;
         soundGameOver.pause();
         soundParty.pause();
