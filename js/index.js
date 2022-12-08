@@ -10,9 +10,13 @@ function generateRandomColor() {
 
 function changeColor() {
   let startButton = document.getElementsByClassName("start-button");
+  let restartButton = document.getElementsByClassName("restart-button");
   for (i=0; i<startButton.length; i++) {
       startButton[i].style.backgroundColor = generateRandomColor();
   }
+  for (i=0; i<restartButton.length; i++) {
+    restartButton[i].style.backgroundColor = generateRandomColor();
+}
 }
 
 setInterval(changeColor, 300)
@@ -22,7 +26,7 @@ const gameScreen = new Image();
 gameScreen.src = "../images/dirt-background.jpeg"
 
 const partyScreen = new Image();
-partyScreen.src = "Berghain-game/images/party-background.jpg"
+partyScreen.src = "images/party-background.jpg"
 
 
 
@@ -30,11 +34,12 @@ let counter = 0;
 let frames = 0;
 let myObstacles = [];
 let intervalId;
+let currentPlayer
 
 // CLASS
 class Obstacles {
   constructor(width, height, color, x, y) {
-    this.width = 60;
+    this.width = width;
     this.height = height;
     this.color = color;
     this.x = canvas.width - 200;
@@ -51,7 +56,7 @@ class Obstacles {
     fences.src = "images/fences.png";
   }
   draw() {
-    ctx.drawImage(this.fences, this.x, this.y, this.width, this.height);
+    ctx.drawImage(this.fences, this.x, this.y, 60, this.height);
   }
   update() {
     ctx.fillStyle = this.color
@@ -74,21 +79,15 @@ class Obstacles {
     return this.y + this.height;
   }
 
-  crashWith(obstacle) {
 
-    return !(
-    this.bottom() < obstacle.top() ||
-    this.top() > obstacle.bottom() ||
-    this.right() < obstacle.left() +5 ||
-    this.left() > obstacle.right() -5
-  );
-}
 }
 
 class Building {
   constructor() {
     this.x = canvas.width - 145;
     this.y = -50;
+    this.width = 200;
+    this.height = 600;
  
     const theBuilding = new Image();
     theBuilding.addEventListener('load', () => {
@@ -98,14 +97,27 @@ class Building {
     theBuilding.src = "images/Berghain-gameScreen.png";
   }
   draw() {
-    ctx.drawImage(this.theBuilding, this.x, this.y, 200, 600);
+    ctx.drawImage(this.theBuilding, this.x, this.y, this.width, this.height);
   }
+  
+  top() {
+    return this.y;
+  }
+  bottom() {
+    return this.y + this.height;
+  }
+  right() {
+   return this.x + this.width;
+  }  
+  left() {
+    return this.x
+  }  
 }
 
 
 class Player {
   constructor() {
-    this.x = canvas.width - 500//(canvas.width - 5);
+    this.x = canvas.width - 500 //(canvas.width + 5);
     this.y = 250;
     this.speedX = 0;
     this.speedY = 0;
@@ -133,6 +145,9 @@ class Player {
   moveRight() {
     this.x += 5;
   }
+  moveLeft() {
+    this.x -= 5;
+  }
   top() {
     return this.y;
   }
@@ -146,23 +161,20 @@ class Player {
     return this.x
   }  
 
-//   crashWith(obstacle) {
-//     console.log("condition 1", !this.bottom() < obstacle.top())
-//     console.log("condition 2", !this.top() > obstacle.bottom())
-//     console.log("condition 3", !this.right() < obstacle.left())
-//     console.log("condition 4", !this.left() > obstacle.right())
-//     return !(
-//       this.bottom() < obstacle.top() || 
-//       this.top() > obstacle.bottom() || 
-//       this.right() < obstacle.left() +5 || 
-//       this.left() > obstacle.right());
-// }
+  frontDoor() {
+    if (this.x > 1020) {
+      stop();
+      checkPartyIn();
+      //console.log("party IN");
+    }
+  }
 }
-
 // FUNCTIONS
 
 function startGame() {
   drawGameScreen();
+  myObstacles = [];
+  frames = 0
   playerAvatar.draw();
   theBuilding.draw()
 }
@@ -182,14 +194,18 @@ function drawGameScreen () {
 
 function drawPartyScreen() {
   ctx.drawImage(partyScreen, 0, 0, canvas.width, canvas.height);
+  ctx.font = '18px arial';
+  ctx.fillStyle = 'white';
+  ctx.fillText(`Time: ${time}min`, canvas.width -150, 35);
+  
   //canvas.style = 'opacity: 0.3;';
-  function partyBackground() {
-    let colorCh = document.getElementById("color-overlay")
-    colorCh.style.backgroundColor = generateRandomColor();
+  // function partyBackground() {
+  //   let colorCh = document.getElementById("color-overlay")
+  //   colorCh.style.backgroundColor = generateRandomColor();
     
-  }
-  partyBackground();
-  setInterval(partyBackground, 500);
+  // }
+  // partyBackground();
+  // setInterval(partyBackground, 500);
   //document.querySelector('#game-screen').style.display = 'none';
   //theBuilding.remove;
   
@@ -200,11 +216,14 @@ function drawPartyScreen() {
 function gameOver() {
   document.querySelector('#game-screen').style.display = 'none';
   document.querySelector('#gameover-screen').style = 'justify-content: center;';
+  ctx.font = '18px arial';
+  ctx.fillStyle = 'white';
+  ctx.fillText(`Time: ${time}min`);
 
 }
 
 function updateTimer() {
-  time = Math.floor(frames/10); // 1 sec -->12
+  time = Math.floor(frames/40); // 1 sec -->12
   ctx.font = '18px arial';
   ctx.fillStyle = 'black';
   ctx.fillText(`Time: ${time}min`, canvas.width -150, 35);
@@ -218,6 +237,7 @@ function updateGame() {
   updateObstacles();
   updateTimer();
   checkGameOver();
+  playerAvatar.frontDoor();
   
   
 
@@ -238,7 +258,7 @@ function updateObstacles() {
     let height = Math.floor(
       Math.random() * (maxHeight - minHeight + 1) + minHeight
     );
-    let minGap = 130;
+    let minGap = 140;
     let maxGap = 200;
     let gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
     myObstacles.push(new Obstacles(5, height, "gray", x, 0));
@@ -249,6 +269,18 @@ function updateObstacles() {
   }
 }
 
+function checkPartyIn() {
+  stop();
+  if (time % 5 == 0) {
+    gameOver()
+  }
+  else {
+    drawPartyScreen()
+  }
+
+}
+
+
 function checkGameOver() {
   const crashed = myObstacles.some(function (obstacle) {// check if one of the obstacles has crashed with the player
     return crashWith(obstacle);
@@ -257,9 +289,6 @@ function checkGameOver() {
   if(crashed) {
     stop();
     gameOver();
-    //drawPartyScreen();
-    //console.log(myObstacles[0], myObstacles[1]);
-    //alert("game over")
     //alert("collision detected")
     console.log("game over");
   }
@@ -270,11 +299,21 @@ function crashWith(obstacle) {
     return !(
     playerAvatar.bottom() < obstacle.top() ||
     playerAvatar.top() > obstacle.bottom() ||
-    playerAvatar.right() < obstacle.left() +5 ||
-    playerAvatar.left() > obstacle.right() -5
+    playerAvatar.right() < obstacle.left() ||
+    playerAvatar.left() > obstacle.right()
   );
 }
 
+// function crashWith(theBuilding) {
+
+//   return !(
+//   playerAvatar.bottom() < theBuilding.top() ||
+//   playerAvatar.top() > theBuilding.bottom() ||
+//   playerAvatar.right() < theBuilding.left() ||
+//   playerAvatar.left() > theBuilding.right()
+// );
+
+// }
 
 
 
@@ -296,7 +335,6 @@ window.onload = () => {
       //console.log(button)
      // button.addEventListener('click', () => {
         clearInterval(intervalId);
-        myObstacles = [];
         startGame();
         setTimeout(() => intervalId = setInterval(updateGame, 20), 100);
       };
@@ -316,6 +354,10 @@ document.addEventListener('keydown', event => {
     case 39:
       playerAvatar.moveRight();
       console.log('right', playerAvatar);
+      break;
+      case 37:
+      playerAvatar.moveLeft();
+      console.log('left', playerAvatar);
       break;
   }
   

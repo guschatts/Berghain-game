@@ -38,9 +38,22 @@ p {
   .start-button:hover {
     cursor: pointer;
   }
+  .restart-button {
+    font-size: 2em;
+    background-image: none;
+    color: rgb(178, 177, 177);
+    padding: 20px 20px;
+    border: 0;
+    box-shadow: 0;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+  .restart-button:hover {
+    cursor: pointer;
+  }
 
   .berghain-not {
-    width: 30vw;
+    width: 40vw;
   }
   
 canvas {
