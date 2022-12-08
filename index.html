@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="./css/style.css" />
+    <link rel="icon" type="image/x-icon" href="./images/berghain-logo.png">
     <title>Berghain-game</title>
   </head>
   <body>
@@ -23,7 +24,7 @@
     </div>
     <!-- GAME PAGE -->
     <div id="game-screen">
-      <canvas id="canvas" class="color-overlay" width="1200" height="600"></canvas>
+      <canvas id="canvas" class="canvas" width="1200" height="600"></canvas>
     </div> 
 
     <!-- GAMEOVER PAGE -->
@@ -35,18 +36,23 @@
       <h3> Try Again!! </h3>
       <button id="restart-button" class="restart-button">
         <img class="logo-berghain" src="./images/berghain-logo.png" alt="logo-berghain" /></button>
+        <footer id="footer" >
+          <p>Music: bensound.com</p>
+        </footer>
     </div>
 
     <!-- WINNER PAGE -->
-    <div id="party-screen" >
-  
-    </div>
-    <footer id="footer" >
-      <p>Music: bensound.com</p>
-    </footer>
-    
-    
+    <div id="party-screen">
+      <footer id="footer" >
+        <p>Music: bensound.com</p>
+      </footer>
 
+    </div>
+    <!---------------------->
+
+    <script src="./js/Obstacles.js"></script>
+    <script src="./js/Building.js"></script>
+    <script src="./js/Player.js"></script>
     <script src="./js/index.js"></script>
   </body>
 </html>

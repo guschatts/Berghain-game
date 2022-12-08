@@ -17,32 +17,29 @@ the player has to move up, down and foward
 
 ### main
 build main screen
+add title
+add berghain icon
+add start button
+add instructions
+
+### game screen
 build game screen
-build gameover scrren
-
-### game board
-game board
 draw canvas
-add fences
-add player
-clear canvas
-update canvas
-check collision
-game over
+class obstacles
+class building
+class player
+check player collision with obstacles
+check player collision with building
+check gameOver
 
-### fences
-draw fences
-move fences
-check player collision
+### gameover screen
+draw gameoverscreen
+play gameover sound
+display message
+display restart button
 
-### player
-draw player
-move player
+### party screen
+draw party screen
+play party sound
 
 
-## Task
-build main screen
-build game screen
-build canvas
-update canvas
-draw canvas
