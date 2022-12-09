@@ -42,4 +42,11 @@ display restart button
 draw party screen
 play party sound
 
+## LINKS
+
+### Git
+
+Link Repo: https://github.com/guschatts/Berghain-game
+Link Deploy: https://guschatts.github.io/Berghain-game/
+
 
