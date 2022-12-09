@@ -125,7 +125,7 @@ function updateObstacles() {
   }
 
   frames += 1;
-  if (frames % 140 === 0) {
+  if (frames % 150 === 0) {
     let x = canvas.width;
     let y = canvas.height; // added
     let minHeight = 80;

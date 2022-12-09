@@ -49,4 +49,8 @@ play party sound
 Link Repo: https://github.com/guschatts/Berghain-game
 Link Deploy: https://guschatts.github.io/Berghain-game/
 
+### Presentation
+
+link presentation slides: https://docs.google.com/presentation/d/1HToev1Kda-iLbHXb_gVVtv6xQqcF79ORGwCw07IGpMg/edit?usp=sharing
+
 
